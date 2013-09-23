@@ -71,3 +71,11 @@ encode (x:xs) =
     else [(1,x)] ++ ((n,y):ys)
 -- magic: group in Data.List
 
+-- Question 11
+data Encoding a = Single a | Multiple Int a
+    deriving (Show)
+encodeModified :: Eq a => [a] -> [Encoding a]
+encodeModified = map conv . encode
+    where conv (1,x) = Single x
+          conv (n,x) = Multiple n x
+
