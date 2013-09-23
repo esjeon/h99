@@ -233,3 +233,32 @@ goldbach n = head $ [ (x,y) | x <- ps, y <- ps, x+y == n ]
 
 -- Question 41
 goldbachList n m = map goldbach $ filter even [n..m]
+
+
+-- utils for chapter 4
+bshow :: [Bool] -> String
+bshow ps = concatMap str ps
+    where str True  = "True  "
+          str False = "False "
+
+btblf :: Int -> [[Bool]]
+btblf 1 = [[True], [False]]
+btblf n = let tbl = btblf (n-1)
+         in (map (True:) tbl) ++ (map (False:) tbl)
+
+-- Question 46
+-- skipped predicates
+table :: (Bool -> Bool -> Bool) -> IO ()
+table f = do
+    mapM_ (putStrLn.bshow) [ [p,q,f p q] | [p] <- btblf 1, [q] <- btblf 1 ]
+
+-- Question 48
+tablen :: Int -> ([Bool] -> Bool) -> IO ()
+tablen n f = do mapM_ (putStrLn.bshow) [ ps ++ [f ps] | ps <- btblf n]
+
+-- Question 49
+gray 0 = [""]
+gray n = [ '0':c | c <- cs ] ++ reverse [ '1':c | c <- cs ]
+    where cs = gray (n-1)
+
+
