@@ -118,3 +118,11 @@ dropEvery xs n = [ x | (k,x) <- zip [1..] xs, k `mod` n /= 0 ]
 split :: [a] -> Int -> ([a],[a])
 split xs n = (take n xs, drop n xs)
 
+-- Question 18
+rotate :: [a] -> Int -> [a]
+rotate [] _ = []
+rotate xs 0 = xs
+rotate xs n
+    | n > 0 = (drop n xs) ++ (take n xs)
+    | n < 0 = reverse $ rotate (reverse xs) (-n)
+
