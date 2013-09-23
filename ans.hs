@@ -100,5 +100,8 @@ encodeDirect (x:xs) =
         inc (Single x) = Multiple 2 x
         inc (Multiple n x) = Multiple (n+1) x
 
-
+-- Question 14
+dupli :: [a] -> [a]
+dupli [] = []
+dupli (x:xs) = x:x:(dupli xs)
 
