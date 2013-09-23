@@ -119,6 +119,10 @@ split :: [a] -> Int -> ([a],[a])
 split xs n = (take n xs, drop n xs)
 
 -- Question 18
+slice :: [a] -> Int -> Int -> [a]
+slice xs i k = take (k-i+1) $ drop (i-1) xs
+
+-- Question 19
 rotate :: [a] -> Int -> [a]
 rotate [] _ = []
 rotate xs 0 = xs
