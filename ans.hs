@@ -1,4 +1,8 @@
 
+import System.Random
+import Data.List
+import Data.Ord
+
 -- Question 1
 myLast :: [a] -> a 
 myLast [] = error "list too short"
@@ -137,4 +141,47 @@ removeAt (x:xs) k
     | k == 1 = (x,xs)
     | k > 1  = let (y,ys) = removeAt xs (k-1)
                in (y,x:ys)
+
+-- Question 21
+insertAt :: a -> [a] -> Int -> [a]
+insertAt z [] k
+    | k == 1    = [z]
+    | otherwise = error "index out of range"
+insertAt z (x:xs) k
+    | k == 1 = z:x:xs
+    | k > 1  = x : insertAt z xs (k-1)
+
+-- Question 22
+range i j = [i..j]
+
+-- Question 23
+rndSelect :: [a] -> Int -> IO [a]
+rndSelect [] _ = return []
+rndSelect _ 0 = return []
+rndSelect xs n = do
+    k <- randomRIO (1,length xs)
+    ys <- rndSelect (snd $ removeAt xs k) (n-1)
+    return $ (xs !! (k-1)) : ys
+
+-- Question 24
+diffSelect :: Int -> Int -> IO [Int]
+diffSelect n m =
+    rndSelect [1..m] n
+
+-- Question 25
+rndPermu :: [a] -> IO [a]
+rndPermu xs = rndSelect xs $ length xs
+
+-- Question 26
+combinations :: Int -> [a] -> [[a]]
+combinations _ [] = []
+combinations 1 xs = map (:[]) xs
+combinations n (x:xs) = [ x:c | c <- combinations (n-1) xs ]
+                        ++ combinations n xs
+
+-- Question 27
+-- skipped. couldn't find clean single-function solution
+
+-- Question 28
+lsort = sortBy (comparing length)
 
