@@ -104,4 +104,9 @@ encodeDirect (x:xs) =
 dupli :: [a] -> [a]
 dupli [] = []
 dupli (x:xs) = x:x:(dupli xs)
+-- magic: concatMap
+
+-- Question 15
+repli :: [a] -> Int -> [a]
+repli xs n = concat $ map (replicate n) xs
 
