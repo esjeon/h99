@@ -114,3 +114,7 @@ repli xs n = concat $ map (replicate n) xs
 dropEvery :: [a] -> Int -> [a]
 dropEvery xs n = [ x | (k,x) <- zip [1..] xs, k `mod` n /= 0 ]
 
+-- Question 17
+split :: [a] -> Int -> ([a],[a])
+split xs n = (take n xs, drop n xs)
+
