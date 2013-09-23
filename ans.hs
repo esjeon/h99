@@ -84,3 +84,21 @@ decodeModified :: [Encoding a] -> [a]
 decodeModified = concat . map conv
     where conv (Single x) = [x]
           conv (Multiple n x) = replicate n x
+
+-- Question 13
+encodeDirect :: Eq a => [a] -> [Encoding a]
+encodeDirect [] = []
+encodeDirect [x] = [Single x]
+encodeDirect (x:xs) =
+    let (y:ys) = encodeDirect xs in
+    if x == elem y
+    then ((inc y):ys)
+    else [Single x] ++ (y:ys)
+    where
+        elem (Single x) = x
+        elem (Multiple _ x) = x
+        inc (Single x) = Multiple 2 x
+        inc (Multiple n x) = Multiple (n+1) x
+
+
+
