@@ -130,3 +130,11 @@ rotate xs n
     | n > 0 = (drop n xs) ++ (take n xs)
     | n < 0 = reverse $ rotate (reverse xs) (-n)
 
+-- Question 20
+removeAt :: [a] -> Int -> (a,[a])
+removeAt [] _ = error "index out of range"
+removeAt (x:xs) k
+    | k == 1 = (x,xs)
+    | k > 1  = let (y,ys) = removeAt xs (k-1)
+               in (y,x:ys)
+
