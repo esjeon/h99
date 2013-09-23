@@ -79,3 +79,8 @@ encodeModified = map conv . encode
     where conv (1,x) = Single x
           conv (n,x) = Multiple n x
 
+-- Question 12
+decodeModified :: [Encoding a] -> [a]
+decodeModified = concat . map conv
+    where conv (Single x) = [x]
+          conv (Multiple n x) = replicate n x
