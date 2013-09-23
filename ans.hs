@@ -110,3 +110,7 @@ dupli (x:xs) = x:x:(dupli xs)
 repli :: [a] -> Int -> [a]
 repli xs n = concat $ map (replicate n) xs
 
+-- Question 16
+dropEvery :: [a] -> Int -> [a]
+dropEvery xs n = [ x | (k,x) <- zip [1..] xs, k `mod` n /= 0 ]
+
