@@ -1,6 +1,7 @@
 
 import System.Random
 import Data.List
+import Data.Tuple
 import Data.Ord
 
 -- Question 1
@@ -185,3 +186,50 @@ combinations n (x:xs) = [ x:c | c <- combinations (n-1) xs ]
 -- Question 28
 lsort = sortBy (comparing length)
 
+-- Question 31
+isPrime :: Integral a => a -> Bool
+isPrime 1 = False
+isPrime 2 = True
+isPrime n = all (/= 0) $ map (n `mod`) $ 2:[3,5..k]
+    where k = floor.sqrt $ fromIntegral n
+
+-- Question 32
+myGcd :: Integral a => a -> a -> a
+myGcd a 0 = abs a
+myGcd a b = myGcd b (a `mod` b)
+
+-- Question 33
+coprime :: Integral a => a -> a -> Bool
+coprime a b = gcd a b == 1
+
+-- Question 34
+totient :: Integral a => a -> Int
+totient 1 = 1
+totient n = length $ filter (coprime n) [1..n-1]
+
+-- Question 35
+factor :: Integral a => a -> [a]
+factor n = helper n 2
+    where helper n p
+            | n == 1         = []
+            | n `mod` p == 0 = p : helper (n `div` p) p
+            | otherwise      = helper n (p+1)
+
+-- Question 36
+factorMult :: Integral a => a -> [(a,Int)]
+factorMult n = map swap $ encode $ factor n
+
+-- Question 37
+totient' :: Integral a => a -> a
+totient' n = product [ (p-1) * p^(m-1) | (p,m) <- factorMult n ]
+
+-- Question 39
+primesR a = filter isPrime . range a
+
+-- Question 40
+goldbach :: Integral a => a -> (a,a)
+goldbach n = head $ [ (x,y) | x <- ps, y <- ps, x+y == n ]
+    where ps = primesR 2 (n-1)
+
+-- Question 41
+goldbachList n m = map goldbach $ filter even [n..m]
