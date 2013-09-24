@@ -261,4 +261,14 @@ gray 0 = [""]
 gray n = [ '0':c | c <- cs ] ++ reverse [ '1':c | c <- cs ]
     where cs = gray (n-1)
 
+-- Question 50
+-- NOTE: not efficient at all, but easy to read & straght-forward
+huffman :: (Ord a, Ord f, Num f) => [(a,f)] -> [(a,[Char])]
+huffman xs =
+    let fold [t] = [t]
+        fold ((f1,cs1):(f2,cs2):ts)
+            = fold $ insert (f1+f2, [ (w,'0':c) | (w,c) <- cs1 ] ++
+                                    [ (w,'1':c) | (w,c) <- cs2 ]    ) ts
+    in sortBy (comparing fst) $ snd.head $
+        fold [ (f,[(w,[])]) | (w,f) <- sortBy (comparing snd) xs ]
 
