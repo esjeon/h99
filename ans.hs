@@ -379,3 +379,14 @@ layout' t = fst $ walk 1 1 t
 -- Question 69
 -- skipped. Just tedious.
 
+
+-- Question 90
+queen :: Int -> [[Int]]
+queen n = map reverse $ add n
+    where add i
+            | i == 1 = map (\x->[x]) [1..n]
+            | otherwise = 
+                [ x:s | s <- add (i-1), x <- [1..n],
+                        isNothing $ find (==x) s,
+                        not $ any (\(dy,z) -> abs(z-x) == dy) $ zip [1..] s ]
+
