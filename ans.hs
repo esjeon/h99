@@ -3,6 +3,7 @@ import System.Random
 import Data.List
 import Data.Tuple
 import Data.Ord
+import Data.Maybe
 
 -- Question 1
 myLast :: [a] -> a 
@@ -271,4 +272,110 @@ huffman xs =
                                     [ (w,'1':c) | (w,c) <- cs2 ]    ) ts
     in sortBy (comparing fst) $ snd.head $
         fold [ (f,[(w,[])]) | (w,f) <- sortBy (comparing snd) xs ]
+
+-- Tree definition
+data Tree a = Empty | Branch a (Tree a) (Tree a)
+              deriving (Show, Eq)
+
+-- Question 55
+cbalTree :: Int -> [Tree Char]
+cbalTree 0 = [Empty]
+cbalTree n = [ Branch 'x' l r | m <- [h..h+r],
+                                l <- cbalTree m,
+                                r <- cbalTree (n-m-1) ]
+    where h = (n-1) `quot` 2
+          r = (n-1) `mod` 2
+
+-- Question 56
+-- as suggested in the question...
+mirror :: Tree a -> Tree a -> Bool
+mirror Empty Empty = True
+mirror (Branch _ l1 r1) (Branch _ l2 r2)
+    = mirror l1 r2 && mirror r1 l2
+mirror _ _ = False
+
+symmetric :: Tree a -> Bool
+symmetric Empty = True
+symmetric (Branch _ l r) = mirror l r
+
+-- Question 57
+-- add...? wth is that?
+construct :: Ord a => [a] -> Tree a
+construct xs = foldl add Empty xs
+    where add Empty x = Branch x Empty Empty
+          add (Branch v l r) x =
+            if v < x then Branch v l (add r x)
+                     else Branch v (add l x) r
+
+-- Question 58
+symCbalTree :: Int -> [Tree Char]
+symCbalTree = (filter symmetric) . cbalTree
+
+-- Question 59
+-- Question 60
+-- skipped. Ambiguous & looks tedious
+
+-- Question 61
+countLeaves :: Tree a -> Int
+countLeaves Empty = 0
+countLeaves (Branch _ Empty Empty) = 1
+countLeaves (Branch _ l r) = countLeaves l + countLeaves r
+
+-- Question 61A
+leaves :: Tree a -> [a]
+leaves Empty = []
+leaves (Branch v Empty Empty) = [v]
+leaves (Branch _ l r) = leaves l ++ leaves r
+
+-- Question 62
+internals :: Tree a -> [a]
+internals Empty = []
+internals (Branch _ Empty Empty) = []
+internals (Branch v l r) = v : internals l ++ internals r
+
+-- Question 62A
+atLevel :: Tree a -> Int -> [a]
+atLevel Empty _ = []
+atLevel (Branch v l r) lv
+    | lv == 1   = [v]
+    | otherwise = atLevel l (lv-1) ++ atLevel r (lv-1)
+
+-- Question 63
+completeBinaryTree :: Int -> Tree Char
+completeBinaryTree n = add 1
+    where add i
+            | i <= n    = Branch 'x' (add (i*2)) (add (i*2+1))
+            | otherwise = Empty
+
+isCompleteBinaryTree :: Tree a -> Bool
+isCompleteBinaryTree t = test t 1 (count t)
+    where count Empty          = 0
+          count (Branch _ l r) = count l + count r + 1
+          test Empty          i n = (i > n)
+          test (Branch _ l r) i n = test l (i*2) n && test r (i*2+1) n
+          
+-- Question 64
+layout :: Tree a -> Tree (a,(Int,Int))
+layout t = fst $ walk 1 1 t
+    where walk x y Empty = (Empty, x)
+          walk x y (Branch v l r) =
+            let (l',x' ) = walk x      (y+1) l
+                (r',x'') = walk (x'+1) (y+1) r
+            in (Branch (v,(x',y)) l' r', x'')
+
+
+layout' :: Tree a -> Tree (a,(Int,Int))
+layout' t = fst $ walk 1 1 t
+    where walk x y Empty = (Empty, x)
+          walk x y (Branch v l r) =
+            let (l',x' ) = walk x      (y+1) l
+                (r',x'') = walk (x'+1) (y+1) r
+            in (Branch (v,(x',y)) l' r', x'')
+
+-- Question 65
+-- Question 66
+-- Question 67
+-- Question 68
+-- Question 69
+-- skipped. Just tedious.
 
