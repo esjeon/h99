@@ -385,6 +385,6 @@ queen :: Int -> [[Int]]
 queen n = map reverse $ add n
     where add 1 = map (\x->[x]) [1..n]
           add i = [ x:s | s <- add (i-1), x <- [1..n],
-                          isNothing $ find (==x) s,
-                          not $ any (\(dy,z) -> abs(z-x) == dy) $ zip [1..] s ]
+                          x `notElem` s, noDiag x s ]
+          noDiag x s = all (\(dy,z) -> abs(z-x) /= dy) $ zip [1..] s
 
